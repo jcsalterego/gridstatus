@@ -2,6 +2,7 @@ import os
 
 from gridstatus.httpio.adapter_dispatcher import AdapterDispatcher
 from gridstatus.httpio.adapters.base import BaseAdapter
+from gridstatus.httpio.adapters.file_cache import FileCacheAdapter
 from gridstatus.httpio.adapters.logger import LoggerAdapter
 from gridstatus.httpio.adapters.pickle_cache import PickleCacheAdapter
 from gridstatus.httpio.httpio_pandas import HttpioPandas
@@ -48,5 +49,7 @@ def register_adapter(adapter: BaseAdapter):
 if "HTTPIO_LOGGING" in os.environ:
     register_adapter(LoggerAdapter())
 
-if "HTTPIO_PICKLE_CACHE" in os.environ:
-    register_adapter(PickleCacheAdapter())
+# if "HTTPIO_PICKLE_CACHE" in os.environ:
+#     register_adapter(PickleCacheAdapter())
+
+register_adapter(FileCacheAdapter())
