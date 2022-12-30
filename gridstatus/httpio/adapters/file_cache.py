@@ -1,5 +1,6 @@
 import json
 import os
+import pickle
 import re
 import sys
 import urllib.parse
@@ -36,17 +37,20 @@ class FileCacheAdapter(BaseAdapter):
             if is_new_value:
                 save_value = None
                 if isinstance(value, requests.models.Response):
+                    print(f"response = {value}")
                     save_value = value.content
                     suffix = "data"
-                    pass
                 elif isinstance(value, pd.DataFrame):
                     save_value = value.to_csv()
                     suffix = "csv"
-                    pass
+                elif isinstance(value, list):
+                    save_value = json.dumps([v.to_csv() for v in value])
+                    suffix = "csvjson"
                 elif isinstance(value, str):
                     save_value = value
                     suffix = "data"
-                    pass
+                else:
+                    raise ValueError("Unknown type to save: " + str(type(value)))
 
                 if save_value:
                     if isinstance(save_value, str):
